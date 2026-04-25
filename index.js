@@ -29,17 +29,25 @@ app.get('/', (req, res) => {
   res.json({ 
     mensaje: 'Microservicio funcionando correctamente', 
     status: 'ok',
-    version: '1.0.2',
-    database_configured: !!process.env.DATABASE_URL
+    version: '1.0.3',
+    database_url_exists: !!process.env.DATABASE_URL
   });
 });
 
 // Ruta de salud
-app.get('/salud', (req, res) => {
+app.get('/salud', async (req, res) => {
+  let dbStatus = 'desconectada';
+  try {
+    await pool.query('SELECT 1');
+    dbStatus = 'conectada';
+  } catch (error) {
+    console.error('Error al verificar BD:', error.message);
+  }
+  
   res.json({ 
     status: 'saludable', 
     timestamp: new Date(),
-    database: pool.totalCount > 0 ? 'conectada' : 'desconectada'
+    database: dbStatus
   });
 });
 

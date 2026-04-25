@@ -29,7 +29,7 @@ app.get('/', (req, res) => {
   res.json({ 
     mensaje: 'Microservicio funcionando correctamente', 
     status: 'ok',
-    version: '1.0.1',
+    version: '1.0.2',
     database_configured: !!process.env.DATABASE_URL
   });
 });
